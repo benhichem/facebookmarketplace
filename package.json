@@ -1,7 +1,7 @@
 {
-  "name": "{{param `github.repo` | lowercase}}",
+  "name": "facebookmarketplace",
   "version": "1.0.0",
-  "description": "{{param `description`}}",
+  "description": "",
   "main": "dist/index.js",
   "engines": {
     "npm": ">=10.8.1",
@@ -9,9 +9,9 @@
   },
   "scripts": {
     "test": "npm run clear && jest --coverage",
-    "test:watch": "npm run clear && jest --watch",
-    "start": "npm run build && node --experimental-specifier-resolution=node .",
-    "start:watch": "nodemon src/index.ts",
+    "test:watch": "jest --watch",
+    "start": "npm run build && node --experimental-specifier-resolution=node | pino-pretty",
+    "start:watch": "nodemon --ignore ./profile1/ src/index.ts | pino-pretty",
     "dev": "mprocs",
     "lint": "eslint ./src/**/*.ts",
     "build": "npm run clear && tsc",
@@ -19,14 +19,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/{{param `github.owner`}}/{{param `github.repo`}}.git"
+    "url": "git+https://github.com/benhichem/facebookmarketplace.git"
   },
-  "author": "{{param `git.name`}}<{{param `git.email`}}>",
+  "author": "benhichem<hichemben45@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/{{param `github.owner`}}/{{param `github.repo`}}/issues"
+    "url": "https://github.com/benhichem/facebookmarketplace/issues"
   },
-  "homepage": "https://github.com/{{param `github.owner`}}/{{param `github.repo`}}#readme",
+  "homepage": "https://github.com/benhichem/facebookmarketplace#readme",
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@typescript-eslint/eslint-plugin": "^8.0.1",
@@ -39,5 +39,14 @@
     "ts-jest": "^29.2.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^1.7.4",
+    "pino": "^9.3.2",
+    "pino-pretty": "^11.2.2",
+    "puppeteer": "^23.1.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }
