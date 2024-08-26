@@ -9,44 +9,47 @@ and then the request will go to our node js backend connected via websockets to 
 
 
 features: 
-   [ ] Frontend 
+   [1/2] Frontend 
         [ ] status header : 
             1. server connected.
             2. facebook account connected or connect an account. 
-        [ ] form: 
-            1. search query 
-            2. categories 
-            3. area to look in 
-            4. price limit. 
-            5. number of results.
+        [DONE] form: 
+            search query 
+            categories 
+            area to look in 
+            number of results.
    [ ] Backend: 
-        [x] Setup:
+        [DONE] Setup:
             [DONE] 1. browser connection to browser debugger script.
                 this needs to check what OS is executed and the run the appropreate command to start chrome browser. 
             [DONE] 2. get browser Port Number 
                 this function will get the port number so puppeteer can connect to it , also will serve as a check if browser has started or not. 
             [DONE] 3. puppeteer setup with puppeteer-extra and plugins and also the session needs to connect with websockets.
-        [ ] Scraping functions : 
+        [DONE] Scraping functions : 
             [DONE] 1. check if logged in.
             [DONE] 2. login manual script. 
                 // page needs to close right after the loggin is succesfull.
-            [] 3. GetCategories Function 
             [DONE]4. Fill in Form For Query Function 
-            5. Collect Data
+            [5/5] 5. Collect Data
+                [DONE] image 
+                [DONE] title 
+                [DONE] description
+                [DONE] price
+                [DONE] seller detail
         [ ] CleanUpData:
             1. NOT YET 
             2. output data to file
         [ ] Tests: 
-        - [ ] backendOnly
-            1. Chrome browser initialization
-            2. get Browser Port function 
-            3. Puppeteer script
-            4. check login 
-            5. login manual 
+        - [5/8] backendOnly
+            [DONE]1. Chrome browser initialization
+            [DONE]2. get Browser Port function 
+            [DONE]3. Puppeteer script
+            [DONE]4. check login 
+            [DONE]5. login manual 
             6. fill in form
-            7. collect Data funciton 
+            7. collect Data
             8. writeToFile 
-    [ ] Scripts: 
+    [0/3] Scripts: 
             1. Start Browser 
             2. Start Server 
             3. Start CLient

@@ -4,6 +4,7 @@ import { delay } from "../../lib";
 //TODO: NOT DONE YET
 export async function fillLocation(searchTerm: string, locationName: string, raduis: number, page: Page) {
   try {
+
     await page.click('#seo_filters > div > div:first-child > div > span')
     await page.waitForSelector("input[aria-label=Location]", { timeout: 3000 })
     await page.type("input[aria-label=Location]", locationName, { delay: 500 })
@@ -15,5 +16,6 @@ export async function fillLocation(searchTerm: string, locationName: string, rad
   } catch (error) {
     console.log(error)
   }
+
 }
 

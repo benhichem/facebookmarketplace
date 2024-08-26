@@ -6,6 +6,9 @@ import { fillLocation } from "./component/scraper/fill_form";
 import { CollectListing } from "./component/scraper/collect_data";
 (async () => {
   try {
+    // Start Browser
+    // Host Vite APP 
+    //
     StartChromeInDebug()
     await delay(5000)
     const WebsocketLink = await GetBrowserLink()
