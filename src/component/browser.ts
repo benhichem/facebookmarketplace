@@ -25,5 +25,3 @@ export function StartChromeInDebug() {
   }
   child_process.exec(osCommand)
 }
-
-

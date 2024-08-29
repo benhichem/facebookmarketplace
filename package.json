@@ -15,7 +15,8 @@
     "dev": "mprocs",
     "lint": "eslint ./src/**/*.ts",
     "build": "npm run clear && tsc",
-    "clear": "rimraf dist"
+    "clear": "rimraf dist",
+    "chrome": "node ./dist/component/browser.js"
   },
   "repository": {
     "type": "git",
@@ -42,11 +43,13 @@
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
+    "@types/ws": "^8.5.12",
     "axios": "^1.7.4",
     "pino": "^9.3.2",
     "pino-pretty": "^11.2.2",
     "puppeteer": "^23.1.0",
     "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2"
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "ws": "^8.18.0"
   }
 }

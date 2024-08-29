@@ -6,14 +6,19 @@
 
 import puppeteer from "puppeteer-extra"
 import stealthPlugin from "puppeteer-extra-plugin-stealth"
-import {  Browser } from "puppeteer"
+import { Browser } from "puppeteer"
 
 // : Promise<{ Page: Page; Browser: Browser }>
-export async function ConnectPuppeteer(WebSocketUrl: string):Promise<Browser> {
+export async function ConnectPuppeteer(WebSocketUrl: string | null): Promise<Browser> {
+
   puppeteer.use(stealthPlugin())
   try {
-    const browser = await puppeteer.connect({ browserWSEndpoint: `${WebSocketUrl}` })
-    return browser
+    if (WebSocketUrl === null) {
+      throw new Error('Failed to Conncect puppeteer with browser')
+    } else {
+      const browser = await puppeteer.connect({ browserWSEndpoint: `${WebSocketUrl}` })
+      return browser
+    }
   } catch (error) {
     console.log(error)
     throw new Error('Failed To Connect To puppeteer To Browser')
