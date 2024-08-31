@@ -35,7 +35,7 @@ function App() {
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(SocketUrl);
   const [messageHistory, setMessageHistory] = useState<MessageEvent<any>[]>([]);
   const [disabledButton, setDisableButton] = useState<boolean>(true)
-  const [loggedIn, setLoggedIn] = useState<boolean>(true)
+  // const [loggedIn, setLoggedIn] = useState<boolean>(true)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
@@ -44,19 +44,25 @@ function App() {
     [ReadyState.CLOSED]: 'Closed',
     [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
   }[readyState];
-  useEffect(() => {
-    sendJsonMessage('check login')
-    if (lastMessage !== null) {
-      if (lastMessage.data === "true") {
-        setLoggedIn(false)
-      }
-    }
-  }, [lastMessage])
+
+  // useEffect(() => {
+  //   sendJsonMessage('check login')
+  //   if (lastMessage !== null) {
+  //     if (lastMessage.data === "true") {
+  //       setLoggedIn(false)
+  //     }
+  //     console.log(lastMessage.data)
+  //   }
+  // }, [])
+
   useEffect(() => {
     if (lastMessage !== null) {
       console.log(lastMessage)
+      if(lastMessage.data.includes('Finished Scraping')){
+
+      }
       setMessageHistory((prev) => prev.concat(lastMessage));
-      console.log(messageHistory)
+      // console.log(messageHistory)
     }
     if (connectionStatus === "Open") setDisableButton(false)
   }, [lastMessage, connectionStatus]);
@@ -75,7 +81,7 @@ function App() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
-    sendJsonMessage<{ event: string, payload: [] }>({ event: "search", payload: [] })
+    sendJsonMessage<{ event: string, payload: z.infer<typeof formSchema> }>({ event: "search", payload: values })
   }
   function onSubmitLogin() {
     sendJsonMessage<{ event: string, payload: [] }>({ event: "Login to facebook", payload: [] }, false)
@@ -85,14 +91,12 @@ function App() {
     <div className="w-dvw h-dvh flex items-center content-center flex-col pt-8 bg-cyan-50">
       <div className="flex flex-col absolute left-0 p-4">
         <span>The Scraper Server is currently {connectionStatus}</span>
-        {loggedIn ?
-          (<Button
+          <Button
             disabled={disabledButton}
             onClick={() => { onSubmitLogin() }}
             className="bg-blue-500 hover:bg-blue-700 w-1/1 mt-4">
             Login To Facebook
-          </Button>)
-          : ("")}
+          </Button>
       </div>
 
       <h1 className="scroll-m-20 p-4 mt-16 text-4xl font-extrabold tracking-tight lg:text-5xl">
