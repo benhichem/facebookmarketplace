@@ -1,6 +1,7 @@
 import { Page } from "puppeteer";
+import { type WebSocket } from "ws";
 
-export async function CollectListing(page: Page) {
+export async function CollectListing(page: Page, ws: WebSocket) {
 
   const ListingLinks: Array<string> = await page.evaluate(() => {
     const images = Array.from(document.querySelectorAll('img')).map((img) => {
@@ -15,6 +16,11 @@ export async function CollectListing(page: Page) {
     console.log(ListingLinks[index])
     const link = ListingLinks[index];
     const data = await CollectProfile(page, link)
+    let text = JSON.stringify(data)
+    ws.send(text, (err) => {
+      if (err) console.log(err)
+      console.log("Message Sent ")
+    })
     console.log(data)
     payload.push(data)
   }
@@ -38,6 +44,8 @@ async function CollectProfile(page: Page, url: string) {
             return (item as HTMLImageElement).src
           })
         }
+      } else {
+        images = []
       }
       const SellerInfo = document.querySelector(sellerinfo) ? (document.querySelector(sellerinfo) as HTMLSpanElement).innerText : "null"
       let descx = document.querySelector(description) ? Array.from(document.querySelector(description)!.children).map((item) => { return (item as HTMLElement).innerText }) : "null"

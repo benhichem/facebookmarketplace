@@ -12,9 +12,14 @@ import {
 } from "@/components/ui/form"
 import { Button } from "./components/ui/button"
 import { Input } from "./components/ui/input"
-
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { useEffect, useState } from "react"
+
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 
 const formSchema = z.object({
   search_term: z.string().min(2, {
@@ -32,10 +37,22 @@ const SocketUrl = "ws://localhost:3002"
 function App() {
   // const [socketUrl, setSocketUrl] = useState('wss://echo.websocket.org');
 
-  const { sendJsonMessage, lastMessage, readyState } = useWebSocket(SocketUrl);
-  const [messageHistory, setMessageHistory] = useState<MessageEvent<any>[]>([]);
+  // let Allerts: Array<{ error_status: boolean; variant: "default" | "destructive"; title: string; description: string }> = [
+
+  // ]
+  const { sendJsonMessage, lastMessage, readyState } = useWebSocket(SocketUrl, {
+    onError: () => {
+      Allerts.push({
+        error_status: true,
+        variant: "destructive",
+        title: "websocket connection",
+        description: "failed to connect to websocket"
+      })
+    }
+  });
+
   const [disabledButton, setDisableButton] = useState<boolean>(true)
-  // const [loggedIn, setLoggedIn] = useState<boolean>(true)
+  const [Allerts, setAllerts] = useState<Array<{ error_status: boolean, variant: "destructive" | "default", title: string, description: string }>>([])
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
@@ -45,23 +62,14 @@ function App() {
     [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
   }[readyState];
 
-  // useEffect(() => {
-  //   sendJsonMessage('check login')
-  //   if (lastMessage !== null) {
-  //     if (lastMessage.data === "true") {
-  //       setLoggedIn(false)
-  //     }
-  //     console.log(lastMessage.data)
-  //   }
-  // }, [])
-
   useEffect(() => {
     if (lastMessage !== null) {
       console.log(lastMessage)
-      if(lastMessage.data.includes('Finished Scraping')){
-
-      }
-      setMessageHistory((prev) => prev.concat(lastMessage));
+      // if (lastMessage.data.includes('Finished Scraping')) {
+      //   console.log(lastMessage)
+      //   //TODO: We need An ALlert saying we finished
+      //  
+      // }
       // console.log(messageHistory)
     }
     if (connectionStatus === "Open") setDisableButton(false)
@@ -76,6 +84,12 @@ function App() {
     },
   })
 
+  function removeAllert(index: number) {
+    if (index < 0 || index >= Allerts.length) {
+      console.log("Index out of bounds");
+    }
+    setAllerts([...Allerts.slice(0, index), ...Allerts.slice(index + 1)]);
+  }
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
@@ -89,20 +103,37 @@ function App() {
 
   return (
     <div className="w-dvw h-dvh flex items-center content-center flex-col pt-8 bg-cyan-50">
+      <div className="absolute w-1/4 bottom-0 right-4 m-4">
+        {
+          Allerts.map((item, index) => {
+            return (
+              <Alert key={index} variant={item.variant} className="m-4">
+                <AlertTitle>{item.title}</AlertTitle>
+                <AlertDescription>
+                  {item.description}
+                </AlertDescription>
+                <Button onClick={() => { removeAllert(index) }}>close</Button>
+              </Alert>
+            )
+          })
+        }
+
+      </div>
+
       <div className="flex flex-col absolute left-0 p-4">
         <span>The Scraper Server is currently {connectionStatus}</span>
-          <Button
-            disabled={disabledButton}
-            onClick={() => { onSubmitLogin() }}
-            className="bg-blue-500 hover:bg-blue-700 w-1/1 mt-4">
-            Login To Facebook
-          </Button>
+        <Button
+          disabled={disabledButton}
+          onClick={() => { onSubmitLogin() }}
+          className="bg-blue-500 hover:bg-blue-700 w-1/1 mt-4">
+          Login To Facebook
+        </Button>
       </div>
 
       <h1 className="scroll-m-20 p-4 mt-16 text-4xl font-extrabold tracking-tight lg:text-5xl">
         Facebook Marketplace Scraper
       </h1>
-      <div className="w-2/3 pt-12">
+      <div className="w-2/3  pt-12">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField

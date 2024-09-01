@@ -90,7 +90,7 @@ async function main() {
             await newPage2.goto('https://www.facebook.com/marketplace/?ref=app_tab', { waitUntil: "networkidle2", timeout: 0 })
             //TODO: Still havent Done The Raduis
             await fillLocation(payload.search_term, payload.location, 0, newPage2)
-            let payloadReturn = await CollectListing(newPage2)
+            let payloadReturn = await CollectListing(newPage2, ws)
             await newPage2.close()
             fs.writeFileSync(`./output/${getCurrentDateTimeFormatted()}.json`, JSON.stringify(payloadReturn))
             ws.send(`Finished Scraping ${payload.search_term}`)
