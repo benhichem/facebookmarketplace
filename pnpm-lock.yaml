@@ -11,6 +11,9 @@ importers:
       '@types/axios':
         specifier: ^0.14.0
         version: 0.14.0
+      '@types/ws':
+        specifier: ^8.5.12
+        version: 8.5.12
       axios:
         specifier: ^1.7.4
         version: 1.7.4
@@ -29,6 +32,9 @@ importers:
       puppeteer-extra-plugin-stealth:
         specifier: ^2.11.2
         version: 2.11.2(puppeteer-extra@3.3.6(puppeteer-core@23.1.0)(puppeteer@23.1.0(typescript@5.5.4)))
+      ws:
+        specifier: ^8.18.0
+        version: 8.18.0
     devDependencies:
       '@types/jest':
         specifier: ^29.5.12
@@ -463,6 +469,9 @@ packages:
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
+
+  '@types/ws@8.5.12':
+    resolution: {integrity: sha512-3tPRkv1EtkDpzlgyKyI8pGsGZAGPEaXeu0DOj5DI25Ja91bdAYddYHbADRYVrZMRbfW+1l5YwXVDKohDJNQxkQ==}
 
   '@types/yargs-parser@21.0.3':
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
@@ -2841,6 +2850,10 @@ snapshots:
       undici-types: 6.19.8
 
   '@types/stack-utils@2.0.3': {}
+
+  '@types/ws@8.5.12':
+    dependencies:
+      '@types/node': 22.4.1
 
   '@types/yargs-parser@21.0.3': {}
 

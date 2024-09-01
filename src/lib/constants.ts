@@ -7,5 +7,14 @@ export const Constants = {
     win: 'start chrome.exe --remote-debugging-port=9222 --no-first-run --no-default-browser-check --user-data-dir=./profile1/',
     darwin: '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --remote-debugging-port=9222 --no-first-run --no-default-browser-check --user-data-dir=./profile1/'
   },
-  FacebookHeaderBarHomePage: "div[role=navigation]"
+  FacebookHeaderBarHomePage: "div[role=navigation]",
+  FacebookListingDetail: {
+    title: 'div:nth-child(1) > h1 > span',
+    image:"div[role=main]",  // quyerSelectorAll('img[referrerpolicy="origin-when-cross-origin"]')
+    seller: 'span > div > div > a > span',
+    description: 'div.xb57i2i.x1q594ok.x5lxg6s.x78zum5.xdt5ytf.x6ikm8r.x1ja2u2z.x1pq812k.x1rohswg.xfk6m8.x1yqm8si.xjx87ck.x1l7klhg.xs83m0k.x2lwn1j.xx8ngbg.xwo3gff.x1oyok0e.x1odjw0f.x1e4zzel.x1n2onr6.xq1qtft.x1iyjqo2.xqtp20y.xx6bls6.xh8yej3.xiylbte > div.x78zum5.xdt5ytf.x1iyjqo2.x1n2onr6 > div:nth-child(5) > div.x1gslohp',
+    description_text:'div.x1n2onr6.x1ja2u2z.x9f619.x78zum5.xdt5ytf.x2lah0s.x193iq5w.xx6bls6.xjbqb8w > div > div:nth-child(2) > div > div > span',
+    price:'div.xb57i2i.x1q594ok.x5lxg6s.x78zum5.xdt5ytf.x6ikm8r.x1ja2u2z.x1pq812k.x1rohswg.xfk6m8.x1yqm8si.xjx87ck.x1l7klhg.xs83m0k.x2lwn1j.xx8ngbg.xwo3gff.x1oyok0e.x1odjw0f.x1e4zzel.x1n2onr6.xq1qtft.x1iyjqo2.xqtp20y.xx6bls6.xh8yej3.xiylbte > div.x78zum5.xdt5ytf.x1iyjqo2.x1n2onr6 > div.xyamay9.x1pi30zi.x18d9i69.x1swvt13 > div.x1xmf6yo > div > span',
+    video:"video"
+  }
 }
