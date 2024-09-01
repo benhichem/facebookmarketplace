@@ -30,7 +30,8 @@ When the script starts, it will automatically open a browser and navigate to the
 **Important**: You must refresh the page to ensure it connects properly to the server.
 You will need to log in to your Facebook account (this step is required only once). After logging in, by clicking the login to facebook button and closing that window.
 fill out the form and simply press 'Submit' to start the scraping process.
-![browser process](./public/New Bitmap Image.png)
+
+![browserprocess](./public/New_Bitmap_Image.png)
 
 output expected example : 
 ```
