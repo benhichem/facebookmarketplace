@@ -35,11 +35,7 @@ const formSchema = z.object({
 
 const SocketUrl = "ws://localhost:3002"
 function App() {
-  // const [socketUrl, setSocketUrl] = useState('wss://echo.websocket.org');
 
-  // let Allerts: Array<{ error_status: boolean; variant: "default" | "destructive"; title: string; description: string }> = [
-
-  // ]
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(SocketUrl, {
     onError: () => {
       Allerts.push({
@@ -64,15 +60,23 @@ function App() {
 
   useEffect(() => {
     if (lastMessage !== null) {
-      console.log(lastMessage)
-      // if (lastMessage.data.includes('Finished Scraping')) {
-      //   console.log(lastMessage)
-      //   //TODO: We need An ALlert saying we finished
-      //  
-      // }
-      // console.log(messageHistory)
+      let message = lastMessage.data
+      if (typeof message === "string") {
+        if (message.includes('Finished Scraping')) {
+          console.log('Got A new Important Message ...', message)
+          let name = message.split('__')[1]
+          Allerts.push({
+            error_status: true,
+            variant: "default",
+            title: "Finished Scraping Profile",
+            description: `new file added ${name}`
+          })
+        }
+      }
     }
-    if (connectionStatus === "Open") setDisableButton(false)
+    if (connectionStatus === "Open") {
+      setDisableButton(false)
+    }
   }, [lastMessage, connectionStatus]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -104,6 +108,7 @@ function App() {
   return (
     <div className="w-dvw h-dvh flex items-center content-center flex-col pt-8 bg-cyan-50">
       <div className="absolute w-1/4 bottom-0 right-4 m-4">
+
         {
           Allerts.map((item, index) => {
             return (

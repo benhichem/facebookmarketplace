@@ -1,7 +1,7 @@
 import { Page } from "puppeteer";
 import { type WebSocket } from "ws";
 
-export async function CollectListing(page: Page, ws: WebSocket) {
+export async function CollectListing(page: Page) {
 
   const ListingLinks: Array<string> = await page.evaluate(() => {
     const images = Array.from(document.querySelectorAll('img')).map((img) => {
@@ -12,23 +12,23 @@ export async function CollectListing(page: Page, ws: WebSocket) {
   })
   console.log(ListingLinks)
   let payload: Array<unknown> = []
-  for (let index = 0; index < 2; /*ListingLinks.length;*/ index++) {
-    console.log(ListingLinks[index])
+  for (let index = 0; index < ListingLinks.length; index++) {
+    logger.info(`Scraping :: , ${ListingLinks[index]}`)
     const link = ListingLinks[index];
     const data = await CollectProfile(page, link)
-    let text = JSON.stringify(data)
-    ws.send(text, (err) => {
-      if (err) console.log(err)
-      console.log("Message Sent ")
-    })
-    console.log(data)
-    payload.push(data)
+    if (data) {
+      logger.info(`returned :: status 200`)
+      payload.push(data)
+    } else {
+      logger.warn('returned :: status 400')
+    }
+
   }
   return payload
 }
 
 
-import { Constants } from "../../lib";
+import { Constants, logger } from "../../lib";
 async function CollectProfile(page: Page, url: string) {
   try {
     let desc: Array<string> | String = ""
@@ -43,6 +43,8 @@ async function CollectProfile(page: Page, url: string) {
           images = Array.from(thething.querySelectorAll('img[referrerpolicy="origin-when-cross-origin"]')).map((item) => {
             return (item as HTMLImageElement).src
           })
+        } else {
+          images = []
         }
       } else {
         images = []
@@ -57,7 +59,7 @@ async function CollectProfile(page: Page, url: string) {
       }
       const price = document.querySelector(prix) ? (document.querySelector(prix) as HTMLElement).innerText : null
       const video = document.querySelector('video') ? (document.querySelector('video') as HTMLVideoElement).src : null
-      return { Title, images, SellerInfo, desc, price, video }
+      return { Title, images, SellerInfo, desc, price, video: video?.includes('blob')! ? null : video }
     }, Constants.FacebookListingDetail.description_text,
       Constants.FacebookListingDetail.title,
       Constants.FacebookListingDetail.image,
@@ -68,6 +70,7 @@ async function CollectProfile(page: Page, url: string) {
     return info
   } catch (error) {
     console.log(error)
+    return null
   }
 
 }

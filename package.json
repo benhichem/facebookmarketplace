@@ -10,7 +10,7 @@
   "scripts": {
     "test": "npm run clear && jest --coverage",
     "test:watch": "jest --watch",
-    "start": "npm run build && node --experimental-specifier-resolution=node | pino-pretty",
+    "start": "npm run build && node --experimental-specifier-resolution=node dist/index.js | pino-pretty",
     "start:watch": "nodemon --ignore ./profile1/ src/index.ts | pino-pretty",
     "dev": "mprocs",
     "lint": "eslint ./src/**/*.ts",

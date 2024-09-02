@@ -1,40 +1,13 @@
 import { GetBrowserLink, StartChromeInDebug, ConnectPuppeteer } from "./component";
 import { Login } from "./component/scraper";
-import { CheckIfLoggedIn } from "./component/scraper/check_login";
 import { delay, logger, getCurrentDateTimeFormatted } from "./lib";
 import { fillLocation } from "./component/scraper/fill_form";
 import { CollectListing } from "./component/scraper/collect_data";
 
 
-
-// (async () => {
-//   try {
-//     // Start Browser
-//     // Host Vite APP 
-//     //
-//     StartChromeInDebug()
-//     await delay(5000)
-//     const WebsocketLink = await GetBrowserLink()
-//     console.log(WebsocketLink)
-//     const Browser = await ConnectPuppeteer(WebsocketLink)
-//     let page = await Browser.newPage()
-//     page.setViewport({ height: 900, width: 1600 })
-
-//     // const isLogged = await CheckIfLoggedIn(page)
-//     // console.log(isLogged)
-//     await page.goto('https://www.facebook.com/marketplace/?ref=app_tab', { waitUntil: "networkidle2", timeout: 0 })
-//     await fillLocation("cars for sale by owner", 'Miami, Florida', 0, page)
-//     await CollectListing(page)
-
-
-//   } catch (error) {
-//     console.log(error)
-//   }
-// })()
-
-
 import { WebSocketServer } from "ws"
 import fs from "node:fs"
+import * as child_process from "child_process"
 
 type webSocketEvents = "Login to facebook" | "check login" | "search"
 
@@ -46,24 +19,23 @@ type event = {
 const CLientURL = "http://localhost:5173/"
 async function main() {
   try {
+    child_process.exec("cd marketplaceclient && pnpm run dev")
     StartChromeInDebug()
     await delay(5000)
     const wsServer = new WebSocketServer({ port: 3002 })
     const BrowserLink = await GetBrowserLink()
-    console.log(BrowserLink)
+    logger.info(`Browser Connection Url :: ${BrowserLink}`) 
     const browser = await ConnectPuppeteer(BrowserLink)
     const page = await browser.newPage()
     await page.setViewport({ height: 900, width: 1600 })
     await page.goto(CLientURL, { waitUntil: "networkidle2", timeout: 0 })
     await delay(2000)
     wsServer.on('connection', (ws) => {
-      console.log('First Web Socket Established')
+      logger.info('Established Connection to Browser ...')
       ws.on('message', async (data) => {
         let message: event = JSON.parse(
           data.toString(),
         )
-
-        console.log(message)
         switch (message.event) {
           case "Login to facebook":
             // await new Script(browser.browser!, message.payload).extract()
@@ -80,9 +52,10 @@ async function main() {
             ws.send("true")
             break;
           case "search":
-            console.log(message)
+           
             let payload = message.payload as { search_term: string; location: string; radui: string }
             logger.info('Received an order Search')
+            logger.info(`search_term : ${payload.search_term}, location : ${payload.location}`)
             const newPage2 = await browser.newPage()
             await newPage2.setViewport({
               height: 900, width: 1600
@@ -90,10 +63,10 @@ async function main() {
             await newPage2.goto('https://www.facebook.com/marketplace/?ref=app_tab', { waitUntil: "networkidle2", timeout: 0 })
             //TODO: Still havent Done The Raduis
             await fillLocation(payload.search_term, payload.location, 0, newPage2)
-            let payloadReturn = await CollectListing(newPage2, ws)
+            let payloadReturn = await CollectListing(newPage2)
             await newPage2.close()
             fs.writeFileSync(`./output/${getCurrentDateTimeFormatted()}.json`, JSON.stringify(payloadReturn))
-            ws.send(`Finished Scraping ${payload.search_term}`)
+            ws.send(`Finished Scraping ${payload.search_term} __ ./output/${getCurrentDateTimeFormatted()}.json`)
             break;
           default:
             ws.send('1')
