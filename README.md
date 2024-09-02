@@ -11,25 +11,17 @@ A Facebook Marketplace scraper designed to automate the extraction of product li
   - [License](#license)
   - [Author](#author)
 
-## Installation
+## Installation & usage
 please make sure you have node v20 or above installed on your system 
 if not follow the instruction bellow : https://radixweb.com/blog/installing-npm-and-nodejs-on-windows-and-mac
 
-run this command inside the folder terminal 
-```
-npm install
-```
-## Usage
+there is two files in the folder run.sh and run.bat this will take care of installation and running the script for you 
+if on windows run run.bat 
+if on linux or mac run run.sh
 
-
-```
-npm run start
-
-```
 When the script starts, it will automatically open a browser and navigate to the Facebook Marketplace webpage.
 **Important**: You must refresh the page to ensure it connects properly to the server.
-You will need to log in to your Facebook account (this step is required only once). After logging in, by clicking the login to facebook button and closing that window.
-fill out the form and simply press 'Submit' to start the scraping process.
+You will need to log in to your Facebook account (this step is required only once). After logging in, fill out the form and simply press 'Submit' to start the scraping process.
 ![browser process](./public/New Bitmap Image.png)
 
 output expected example : 
